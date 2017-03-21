@@ -2,8 +2,20 @@ var frisby = require('frisby');
 var envProd="http://program.abcradio.net.au/api/v1/programs/ppJj0E8g2R.json";
 var envTest="http://test-program.abcradio.net.au/api/v1/programs/ppJj0E8g2R.json";
 var envStaging="http://staging-program.abcradio.net.au/api/v1/programs/ppJj0E8g2R.json";
+
+var fs = require("fs");
+console.log("\n *START* \n");
+var content = fs.readFileSync("ppJj0E8g2R.json");
+console.log("Output Content : \n"+ content);
+console.log("\n *EXIT* \n");
+var jsonContent = JSON.parse(content);
+console.log("entity:", jsonContent.entity);
+console.log("air:", jsonContent.arid);
+console.log("name:", jsonContent.title);
+
+
 frisby.create('GET JSON data from an abc endpoint')
-    .get(envTe)
+    .get(envProd)
     .expectStatus(200)
     .expectHeader('Content-Type', 'application/json')
     .afterJSON(function(json) {
@@ -11,30 +23,30 @@ frisby.create('GET JSON data from an abc endpoint')
         expect(json).not.toBe(null);
     })
     .expectJSON({
-        entity : "Program"
+        entity : jsonContent.entity
     })
     .expectJSON({
-        arid : "ppJj0E8g2R"
+        arid : jsonContent.arid
     })
     .expectJSON({
-        title : "Mornings"
+        title : jsonContent.title
     })
     .expectJSON({
-        mini_synopsis : "Mornings presents local news and issues, talking with everyday folk about current issues"
+        mini_synopsis : jsonContent.mini_synopsis
     })
     .expectJSON({
-        short_synopsis : "Mornings presents local news and issues, talking with everyday folk about current issues"
+        short_synopsis : jsonContent.short_synopsis
     })
     .expectJSON({
-        medium_synopsis : "Mornings presents local news and issues, talking with everyday folk about current issues. Local stories and issues are at the heart of the Mornings program, bringing you fresh local and regional information - including your opportunity to ask direct questions to the ACT Chief Minster each Friday"
+        medium_synopsis : jsonContent.medium_synopsis
     })
     .expectJSON({
-        created_utc : "2014-10-09T05:01:49+0000"
+        created_utc : jsonContent.created_utc
     })
     .expectJSON({
-        last_updated_utc : "2016-09-05T06:49:46+0000"
+        last_updated_utc : jsonContent.last_updated_utc
     })
     .expectJSON({
-        service_airport_code: null
+        service_airport_code: jsonContent.service_airport_code
     })
     .toss();
